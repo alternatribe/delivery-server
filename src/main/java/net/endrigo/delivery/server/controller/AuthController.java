@@ -10,12 +10,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import net.endrigo.delivery.server.business.UserBC;
 import net.endrigo.delivery.server.controller.command.LoginRequest;
 import net.endrigo.delivery.server.controller.command.SignupRequest;
 
 @RestController
 @RequestMapping("/auth")
+@Tag(name = "Auth", description = "API de controle de acesso")
 public class AuthController {
 	
 	@Autowired
@@ -28,7 +30,7 @@ public class AuthController {
 	
 	}
 	
-	@Operation(description = "Incluir Cliente")
+	@Operation(description = "Permite incluir um novo Cliente")
 	@PostMapping("/signup")
 	public ResponseEntity<?> registerClient(@Valid @RequestBody SignupRequest signUpRequest) {
 		return userBC.createClient(signUpRequest);

@@ -24,7 +24,6 @@ import net.endrigo.delivery.server.security.service.UserService;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
     private static final String[] PUBLIC_MATCHERS = {
-            "/h2-console/**",
             "/swagger-ui.html**",
             "/swagger-ui/**",
             "/v3/api-docs/**",
