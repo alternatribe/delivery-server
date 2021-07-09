@@ -33,6 +33,7 @@ public class User {
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
+    @Column(name = "id", unique = true)
 	private UUID id;
 
 	@NotBlank
@@ -71,7 +72,11 @@ public class User {
 	public UUID getId() {
 		return this.id;
 	}
-		
+	
+	public void setId(UUID id) {
+		this.id = id;
+	}
+
 	public String getName() {
 		return name;
 	}

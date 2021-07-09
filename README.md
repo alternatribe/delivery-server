@@ -52,7 +52,7 @@ e depois executar esse arquivo JAR:
 > 
 > e execute novamente
 
-## Como testar se o servidor está funcionando
+## Como verificar se o servidor está funcionando
 
 Acesse `http://localhost:8080/api-docs/index.html`
 

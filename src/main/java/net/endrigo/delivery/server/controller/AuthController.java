@@ -4,6 +4,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,13 +28,22 @@ public class AuthController {
 	@PostMapping("/signin")
 	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 		return userBC.login(loginRequest);
-	
 	}
 	
 	@Operation(description = "Permite incluir um novo Cliente")
 	@PostMapping("/signup")
 	public ResponseEntity<?> registerClient(@Valid @RequestBody SignupRequest signUpRequest) {
-		return userBC.createClient(signUpRequest);
+		userBC.createClient(signUpRequest);
+		LoginRequest loginRequest = new LoginRequest();
+		loginRequest.setEmail(signUpRequest.getEmail());
+		loginRequest.setPassword(signUpRequest.getPassword());
+		return userBC.login(loginRequest);
+	}
+	
+	@Operation(description = "Testa conexão com o servidor")
+	@GetMapping("/test")
+	public ResponseEntity<?> test() {
+		return ResponseEntity.ok().build();
 	}
 
 }

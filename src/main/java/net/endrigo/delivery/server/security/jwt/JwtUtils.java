@@ -1,6 +1,7 @@
 package net.endrigo.delivery.server.security.jwt;
 
 import java.util.Date;
+import java.util.HashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,11 +28,18 @@ public class JwtUtils {
 	private int expiration;
 
 	public String generateJwtToken(Authentication authentication) {
-
 		UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
 
+		HashMap<String, Object> claims = new HashMap<>();
+
+        claims.put("id", userPrincipal.getId());
+        claims.put("email", userPrincipal.getEmail());
+        claims.put("name", userPrincipal.getName());
+        claims.put("role", userPrincipal.getAuthorities().stream().findFirst().get().getAuthority());
+
+
 		return Jwts.builder()
-				.setSubject((userPrincipal.getUsername()))
+				.setClaims(claims)
 				.setIssuedAt(new Date())
 				.setExpiration(new Date((new Date()).getTime() + expiration))
 				.signWith(SignatureAlgorithm.HS512, privateKey)
@@ -39,7 +47,7 @@ public class JwtUtils {
 	}
 
 	public String getUserNameFromJwtToken(String token) {
-		return Jwts.parser().setSigningKey(privateKey).parseClaimsJws(token).getBody().getSubject();
+		return Jwts.parser().setSigningKey(privateKey).parseClaimsJws(token).getBody().get("email").toString();
 	}
 
 	public boolean validateJwtToken(String authToken) {
