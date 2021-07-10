@@ -1,6 +1,10 @@
 package net.endrigo.delivery.server.business;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
+
+import javax.transaction.Transactional;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,15 +17,18 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import net.endrigo.delivery.server.controller.command.ClientRequest;
 import net.endrigo.delivery.server.controller.command.LoginRequest;
 import net.endrigo.delivery.server.controller.command.SignupRequest;
-import net.endrigo.delivery.server.controller.command.UserRequest;
+import net.endrigo.delivery.server.controller.dto.ClientDTO;
+import net.endrigo.delivery.server.controller.dto.UserDTO;
 import net.endrigo.delivery.server.controller.exception.MessageResponse;
-import net.endrigo.delivery.server.controller.query.UserQuery;
+import net.endrigo.delivery.server.model.Address;
 import net.endrigo.delivery.server.model.Client;
-import net.endrigo.delivery.server.model.RoleEnum;
 import net.endrigo.delivery.server.model.User;
-import net.endrigo.delivery.server.model.UserStatusEnum;
+import net.endrigo.delivery.server.model.enumeration.RoleEnum;
+import net.endrigo.delivery.server.model.enumeration.UserStatusEnum;
+import net.endrigo.delivery.server.repository.ClientRepository;
 import net.endrigo.delivery.server.repository.UserRepository;
 import net.endrigo.delivery.server.security.jwt.CredentialsJWT;
 import net.endrigo.delivery.server.security.jwt.JwtUtils;
@@ -34,25 +41,27 @@ public class UserBC {
 
 	@Autowired
 	UserRepository userRepository;
-
+	
+	@Autowired
+	ClientRepository clientRepository;
+	
 	@Autowired
 	PasswordEncoder encoder;
 
 	@Autowired
 	JwtUtils jwtUtils;
 
-	public ResponseEntity<?> login(LoginRequest loginRequest) {
+	public ResponseEntity<CredentialsJWT> login(LoginRequest loginRequest) {
 		Authentication authentication = authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
 
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		String jwt = jwtUtils.generateJwtToken(authentication);
 
-		return ResponseEntity
-				.ok(new CredentialsJWT(jwt));
+		return ResponseEntity.ok(new CredentialsJWT(jwt));
 	}
 
-	public ResponseEntity<?> createUser(SignupRequest signUpRequest) {
+	public ResponseEntity<MessageResponse> createUser(SignupRequest signUpRequest) {
 		if (userRepository.existsByEmail(signUpRequest.getEmail())) {
 			return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already in use!"));
 		}
@@ -93,44 +102,91 @@ public class UserBC {
 		return true;
 	}
 	
-	public ResponseEntity<?> obter(UUID id) {
-		User cliente = this.userRepository.getById(id);
-		return ResponseEntity.ok().body(new UserQuery(cliente));
+	public ResponseEntity<ClientDTO> obterClient(UUID id) {
+		Client client = this.clientRepository.getById(id);
+		return ResponseEntity.ok().body(new ClientDTO(client));
 	}
-	
-	public ResponseEntity<?> listar() {
-		return ResponseEntity.ok().body(this.userRepository.findAll());
+
+	public ResponseEntity<UserDTO> obter(UUID id) {
+		User user = this.userRepository.getById(id);
+		return ResponseEntity.ok().body(new UserDTO(user));
+	}
+
+	public ResponseEntity<List<UserDTO>> findAll() {
+		List<UserDTO> lista = this.userRepository.findAll().stream().map(user -> new UserDTO(user)).collect(Collectors.toList());
+		return ResponseEntity.ok().body(lista);
 	}
 
 	public void delete(UUID id) {
-		User cliente = this.userRepository.getById(id);
-		cliente.setStatus(UserStatusEnum.INACTIVE);
-		userRepository.save(cliente);
+		User user = this.userRepository.getById(id);
+		user.setStatus(UserStatusEnum.INACTIVE);
+		userRepository.save(user);
 	}
 
-	public void update(UserRequest userUpdate) {
-		User novoUser = this.userRepository.getById(userUpdate.getId());
-		
-//		if (!userUpdate.getEmail().isEmpty()) {
+	@Transactional
+	public void updateClient(ClientRequest userClient) {
+		boolean changed = false;
+		Client novoClient = this.clientRepository.getById(userClient.getId());
+		Address address = new Address();
+
+//		if (!StringUtils.isBlank(userUpdate.getEmail())) {
 //			novoUser.setEmail(userUpdate.getEmail());
+//			changed = true;
 //		}
 //		
-//		if (!userUpdate.getName().isEmpty()) {
+//		if (!StringUtils.isBlank(userUpdate.getName())) {
 //			novoUser.setName(userUpdate.getName());
+//			changed = true;
 //		}
 		
-		if (!StringUtils.isBlank(userUpdate.getNewPassword())) {
-			try {				
-			Authentication authentication = authenticationManager.authenticate(
-					new UsernamePasswordAuthenticationToken(novoUser.getEmail(), userUpdate.getPassword()));
-				if (authentication.isAuthenticated()) {				
-					novoUser.setPassword(encoder.encode(userUpdate.getPassword()));
+		if (novoClient.getAddress() == null) {
+			novoClient.setAddress(address);
+		}
+		
+		if (!StringUtils.isBlank(userClient.getAddress().getStreet())) {
+			novoClient.getAddress().setStreet(userClient.getAddress().getStreet());
+			changed = true;
+		}
+		if (!StringUtils.isBlank(userClient.getAddress().getHouseNumber())) {
+			novoClient.getAddress().setHouseNumber(userClient.getAddress().getHouseNumber());
+			changed = true;
+		}
+		if (!StringUtils.isBlank(userClient.getAddress().getReference())) {
+			novoClient.getAddress().setReference(userClient.getAddress().getReference());
+			changed = true;
+		}
+		if (!StringUtils.isBlank(userClient.getAddress().getDistrict())) {
+			novoClient.getAddress().setDistrict(userClient.getAddress().getDistrict());
+			changed = true;
+		}
+		if (!StringUtils.isBlank(userClient.getAddress().getZip())) {
+			novoClient.getAddress().setZip(userClient.getAddress().getZip());
+			changed = true;
+		}
+		if (!StringUtils.isBlank(userClient.getAddress().getCity())) {
+			novoClient.getAddress().setCity(userClient.getAddress().getCity());
+			changed = true;
+		}
+		if (!StringUtils.isBlank(userClient.getAddress().getState())) {
+			novoClient.getAddress().setState(userClient.getAddress().getState());
+			changed = true;
+		}
+
+		if (!StringUtils.isBlank(userClient.getNewPassword())) {
+			try {
+				Authentication authentication = authenticationManager.authenticate(
+						new UsernamePasswordAuthenticationToken(novoClient.getEmail(), userClient.getPassword()));
+				if (authentication.isAuthenticated()) {
+					novoClient.setPassword(encoder.encode(userClient.getPassword()));
+					changed = true;
 				}
 			} catch (BadCredentialsException e) {
 				throw new BadCredentialsException(e.getMessage());
 			}
 		}
-		userRepository.save(novoUser);
+		if (changed) {
+			userRepository.save(novoClient);
+		}
 	}
 
 }

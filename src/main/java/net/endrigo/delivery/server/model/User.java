@@ -20,6 +20,8 @@ import javax.validation.constraints.Size;
 import org.hibernate.annotations.GenericGenerator;
 
 import net.endrigo.delivery.server.model.converter.UserStatusConverter;
+import net.endrigo.delivery.server.model.enumeration.RoleEnum;
+import net.endrigo.delivery.server.model.enumeration.UserStatusEnum;
 
 
 @Entity

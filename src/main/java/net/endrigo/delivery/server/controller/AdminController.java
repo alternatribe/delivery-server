@@ -20,7 +20,7 @@ import net.endrigo.delivery.server.controller.command.SignupRequest;
 @RestController
 @PreAuthorize("hasRole('ROLE_ADMIN')")
 @RequestMapping("/admin")
-@Tag(name = "Admin", description = "API de acesso administrativo - Temporariamente liberado sem perfil Administrativo")
+@Tag(name = "Admin", description = "API de acesso administrativo")
 public class AdminController {
 	
 	@Autowired
@@ -33,10 +33,11 @@ public class AdminController {
 		return userBC.createUser(signUpRequest);
 	}
 	
+	@Operation(description = "Lista todos os usuários")
 	@SecurityRequirement(name = "Authorization")
 	@GetMapping(value = "/")
 	public ResponseEntity<?> getUsers() {
-		return this.userBC.listar();
+		return this.userBC.findAll();
 	}
 
 }

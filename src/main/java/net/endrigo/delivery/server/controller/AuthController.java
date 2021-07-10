@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import net.endrigo.delivery.server.business.UserBC;
 import net.endrigo.delivery.server.controller.command.LoginRequest;
 import net.endrigo.delivery.server.controller.command.SignupRequest;
+import net.endrigo.delivery.server.security.jwt.CredentialsJWT;
 
 @RestController
 @RequestMapping("/auth")
@@ -26,13 +27,13 @@ public class AuthController {
 	
 	@Operation(description = "Logar Usuario")
 	@PostMapping("/signin")
-	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+	public ResponseEntity<CredentialsJWT> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 		return userBC.login(loginRequest);
 	}
 	
 	@Operation(description = "Permite incluir um novo Cliente")
 	@PostMapping("/signup")
-	public ResponseEntity<?> registerClient(@Valid @RequestBody SignupRequest signUpRequest) {
+	public ResponseEntity<CredentialsJWT> registerClient(@Valid @RequestBody SignupRequest signUpRequest) {
 		userBC.createClient(signUpRequest);
 		LoginRequest loginRequest = new LoginRequest();
 		loginRequest.setEmail(signUpRequest.getEmail());

@@ -1,42 +1,19 @@
 package net.endrigo.delivery.server.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.Embeddable;
 
-@Entity
+@Embeddable
 public class Address {
-	
-	@Id
-	@GeneratedValue
-	private Long id ;
-	
-	@Column(name = "street", nullable = false)
+
 	private String street;
-	
-	private String number;
-	
-	@Column(name = "zipCode", nullable = false)
-	private String zip;
-	
-	@Column(name = "city", nullable = false)
-	private String city;
-	
-	@Column(name = "state", nullable = false)
-	private String state;
-	
+	private String houseNumber;
 	private String reference;
-	
-	@Column(nullable = false)
-	private Boolean defaultAdress = false;
+	private String district;
+	private String zip;
+	private String city;
+	private String state;
 
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
+	public Address() {
 	}
 
 	public String getStreet() {
@@ -47,12 +24,28 @@ public class Address {
 		this.street = street;
 	}
 
-	public String getNumber() {
-		return number;
+	public String getHouseNumber() {
+		return houseNumber;
 	}
 
-	public void setNumber(String number) {
-		this.number = number;
+	public void setHouseNumber(String houseNumber) {
+		this.houseNumber = houseNumber;
+	}
+
+	public String getReference() {
+		return reference;
+	}
+
+	public void setReference(String reference) {
+		this.reference = reference;
+	}
+
+	public String getDistrict() {
+		return district;
+	}
+
+	public void setDistrict(String district) {
+		this.district = district;
 	}
 
 	public String getZip() {
@@ -78,23 +71,5 @@ public class Address {
 	public void setState(String state) {
 		this.state = state;
 	}
-
-	public String getReference() {
-		return reference;
-	}
-
-	public void setReference(String reference) {
-		this.reference = reference;
-	}
-
-	public Boolean getDefaultAdress() {
-		return defaultAdress;
-	}
-
-	public void setDefaultAdress(Boolean defaultAdress) {
-		this.defaultAdress = defaultAdress;
-	}
-
-	
 
 }

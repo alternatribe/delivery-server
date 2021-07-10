@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import net.endrigo.delivery.server.exception.DisabledAccountException;
 import net.endrigo.delivery.server.model.User;
-import net.endrigo.delivery.server.model.UserStatusEnum;
+import net.endrigo.delivery.server.model.enumeration.UserStatusEnum;
 import net.endrigo.delivery.server.repository.UserRepository;
 
 @Service

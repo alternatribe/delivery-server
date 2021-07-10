@@ -2,8 +2,8 @@ package net.endrigo.delivery.server.model.converter;
 
 import javax.persistence.AttributeConverter;
 
-import net.endrigo.delivery.server.model.EnumUtil;
-import net.endrigo.delivery.server.model.UserStatusEnum;
+import net.endrigo.delivery.server.model.enumeration.EnumUtil;
+import net.endrigo.delivery.server.model.enumeration.UserStatusEnum;
 
 public class UserStatusConverter implements AttributeConverter<UserStatusEnum, String> {
 

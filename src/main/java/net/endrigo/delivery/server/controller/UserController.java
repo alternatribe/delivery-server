@@ -17,7 +17,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import net.endrigo.delivery.server.business.UserBC;
-import net.endrigo.delivery.server.controller.command.UserRequest;
+import net.endrigo.delivery.server.controller.command.ClientRequest;
+import net.endrigo.delivery.server.controller.dto.ClientDTO;
+import net.endrigo.delivery.server.controller.dto.UserDTO;
 
 @RestController
 @RequestMapping("/user")
@@ -27,12 +29,18 @@ public class UserController {
 	@Autowired
 	private UserBC userBC;
 	
-	@Operation(description = "Obter Dados do Cliente")
+	@Operation(description = "Obter Usuário")
 	@SecurityRequirement(name = "Authorization")
 	@GetMapping(value = "/{id}")
-	public ResponseEntity<?> getCliente(@PathVariable UUID id) {
+	public ResponseEntity<UserDTO> getUser(@PathVariable UUID id) {
 		return this.userBC.obter(id);
-
+	}
+	
+	@Operation(description = "Obter Dados do Cliente")
+	@SecurityRequirement(name = "Authorization")
+	@GetMapping(value = "/{id}/details/")
+	public ResponseEntity<ClientDTO> getCliente(@PathVariable UUID id) {
+		return this.userBC.obterClient(id);
 	}
 	
 	@SecurityRequirement(name = "Authorization")
@@ -44,8 +52,8 @@ public class UserController {
 	
 	@SecurityRequirement(name = "Authorization")
 	@PutMapping(value = "/")
-	public ResponseEntity<?> update(@RequestBody UserRequest user) {
-		this.userBC.update(user);
+	public ResponseEntity<?> update(@RequestBody ClientRequest user) {
+		this.userBC.updateClient(user);
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
 

@@ -8,15 +8,11 @@ import org.springframework.stereotype.Repository;
 
 import net.endrigo.delivery.server.model.User;
 
-
 @Repository
 public interface UserRepository extends JpaRepository<User, UUID> {
 	
 	Optional<User> findByEmail(String email);
 
-//	Boolean existsByName(String name);
-
 	Boolean existsByEmail(String email);
 
-//	Optional<User> findById(UUID id);
 }

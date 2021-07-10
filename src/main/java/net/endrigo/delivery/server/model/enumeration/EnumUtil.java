@@ -1,4 +1,4 @@
-package net.endrigo.delivery.server.model;
+package net.endrigo.delivery.server.model.enumeration;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

@@ -1,4 +1,4 @@
-package net.endrigo.delivery.server.model;
+package net.endrigo.delivery.server.model.enumeration;
 
 public enum UserStatusEnum implements ValueLabelEnum<UserStatusEnum> {
 	
