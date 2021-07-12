@@ -14,13 +14,12 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @Entity
-public class Product {
+public class OrderItem {
 	
     @Id
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="productgenerator")
-	@SequenceGenerator(name="productgenerator", sequenceName="PRODUCT_SEQ", allocationSize=1, initialValue=1)
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="ordergenerator")
+	@SequenceGenerator(name="ordergenerator", sequenceName="ORDER_SEQ", allocationSize=1, initialValue=1)
 	private Long id;
 	private String name;
-	private String description;
 	private BigDecimal unitPrice = new BigDecimal(0);
 }
