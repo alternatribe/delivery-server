@@ -16,6 +16,8 @@ ou faça o **download** do projeto clicando no botão **Clone** e depois em **Do
 
 Em **File/Import.../Maven/Existing Maven Projects** entre em **Browse**, selecione o diretório do projeto e clique em **Finish** e espere terminar de importar.
 
+> (necessário ter o Lombok instalado no eclipse - https://projectlombok.org/setup/eclipse)
+
 ## Executar no Eclipse
 
 Entre em **src/main/java** e depois no pacote **net.endrigo.delivery.server**
@@ -29,15 +31,15 @@ Clique com o botão direito no arquivo **ServerApplication**, depois em **Run As
     ./mvnw spring-boot:run
 
 > ou
-> 
+>
 > `mvn spring-boot:run`
 
 Alternativamente, você pode gerar um arquivo JAR com o comando:
 
     ./mvnw clean package
-    
+
 > ou
-> 
+>
 > `mvn clean package`
 
 e depois executar esse arquivo JAR:
@@ -47,9 +49,9 @@ e depois executar esse arquivo JAR:
     java -jar target/server-X.X.X-SNAPSHOT.jar
 
 > Caso dê algum erro ou precise atualizar as dependências, dê o comando:
-> 
+>
 > `mvn clean dependency:purge-local-repository dependency:resolve`
-> 
+>
 > e execute novamente
 
 ## Como verificar se o servidor está funcionando
