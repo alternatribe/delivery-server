@@ -35,8 +35,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/v3/api-docs/**",
             "/api-docs/**",
             "/auth/**",
-            "/product/**",
-            "/order/**"
+            "/product/**"
         };
     
 	@Autowired
