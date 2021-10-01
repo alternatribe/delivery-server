@@ -39,7 +39,7 @@ public class User {
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
-    @Column(name = "id", unique = true)
+    @Column(name = "id", unique = true, updatable = false, nullable = false)
 	private UUID id;
 
 	@NotBlank
